@@ -3,10 +3,6 @@
 import { access } from "fs/promises";
 import { spawn } from "child_process";
 
-// import util from "util";
-// const { promisify } = util;
-// const spawn = promisify(basicSpawn);
-
 (async () => {
   const [exerciseNumber] = process.argv.slice(2);
   const path = `./${exerciseNumber}.js`;
