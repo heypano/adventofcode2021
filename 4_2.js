@@ -38,7 +38,8 @@ while (Object.keys(haventWonYet).length > 0 && randomNumbers.length) {
             cellIndex
           );
           if (isRowWin || isColumnWin) {
-            if (Object.keys(haventWonYet).length === 1) {
+            delete haventWonYet[boardIndex];
+            if (Object.keys(haventWonYet).length === 0) {
               const sum = sumUnmarked(
                 checkedMap,
                 boards[boardIndex],
@@ -47,7 +48,6 @@ while (Object.keys(haventWonYet).length > 0 && randomNumbers.length) {
               finalResult = sum * currentNumber;
               break;
             }
-            delete haventWonYet[boardIndex];
           }
         }
       }
