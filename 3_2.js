@@ -12,18 +12,21 @@ const calculate = (argNumbers, criterion) => {
   let numbers = argNumbers;
   while (numbers.length > 1) {
     const { gamma, equalIndices } = calculateGammaAndEpsilon(numbers);
-    console.log(equalIndices);
+    const mostPopular = Number(gamma[currentIndex]);
     numbers = numbers.filter((number) => {
       const digit = number[currentIndex];
-      const mostPopular = Number(gamma[currentIndex]);
       if (criterion === "oxygen") {
-        return (
-          digit === mostPopular || (equalIndices[currentIndex] && digit === 1)
-        );
+        if (equalIndices[currentIndex]) {
+          return digit === 1;
+        } else {
+          return digit === mostPopular;
+        }
       } else {
-        return (
-          digit !== mostPopular || (equalIndices[currentIndex] && digit === 0)
-        );
+        if (equalIndices[currentIndex]) {
+          return digit === 0;
+        } else {
+          return digit !== mostPopular;
+        }
       }
     });
     if (currentIndex < numDigits - 1) {
