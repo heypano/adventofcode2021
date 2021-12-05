@@ -19,10 +19,11 @@ Object.values(floorGrid).forEach((row) => {
     }
   });
 });
-printGrid(floorGrid);
+// const printed = printGrid(floorGrid);
 console.log(intersectingPoints);
 
 function printGrid(grid) {
+  let printOut = "";
   const height = Number(
     Object.keys(grid).sort((a, b) => Number(a) - Number(b))[
       Object.keys(grid).length - 1
@@ -40,19 +41,22 @@ function printGrid(grid) {
     for (let j = 0; j <= width; j++) {
       result += grid?.[i]?.[j] ? grid[i][j] : 0;
     }
-    console.log(result);
+    printOut += result + "\n";
   }
+  return printOut;
 }
 
 function getMinMax(a, b) {
   let min, max;
-  if (a > b) {
+  if (Number(a) > Number(b)) {
     max = a;
     min = b;
   } else {
     max = b;
     min = a;
   }
+  min = Number(min);
+  max = Number(max);
   return { min, max };
 }
 
@@ -83,5 +87,7 @@ function draw(map, point1, point2) {
     // vertical
     const { min, max } = getMinMax(y1, y2);
     drawDirection(floorGrid, x1, min, max, "vertical");
+  } else {
+    // console.log(`not dealing with ${x1} ${y1} ${x2} ${y2}`);
   }
 }
