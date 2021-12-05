@@ -19,7 +19,8 @@ Object.values(floorGrid).forEach((row) => {
     }
   });
 });
-// const printed = printGrid(floorGrid);
+const printed = printGrid(floorGrid);
+console.log(printed);
 console.log(intersectingPoints);
 
 function printGrid(grid) {
@@ -39,7 +40,7 @@ function printGrid(grid) {
   for (let i = 0; i <= height; i++) {
     let result = "";
     for (let j = 0; j <= width; j++) {
-      result += grid?.[i]?.[j] ? grid[i][j] : 0;
+      result += grid?.[i]?.[j] ? grid[i][j] : ".";
     }
     printOut += result + "\n";
   }
@@ -76,9 +77,28 @@ function drawDirection(map, stable, min, max, type) {
   }
 }
 
+function drawDiagonal(map, x1, y1, x2, y2) {
+  const stepx = (x2 - x1) / Math.abs(x2 - x1);
+  const stepy = (y2 - y1) / Math.abs(y2 - y1);
+  const { min: minX, max: maxX } = getMinMax(x1, x2);
+  const { min: minY, max: maxY } = getMinMax(y1, y2);
+  let x = x1;
+  let y = y1;
+  // console.log(`Working on (${x1},${y1}) -> (${x2},${y2})`);
+  while (x <= maxX && x >= minX && y <= maxY && y >= minY) {
+    if (!map[y]) {
+      map[y] = {};
+    }
+    // console.log(`marking ${x} ${y}`);
+    map[y][x] = map[y][x] ? map[y][x] + 1 : 1;
+    x += stepx;
+    y += stepy;
+  }
+}
+
 function draw(map, point1, point2) {
-  const [x1, y1] = point1;
-  const [x2, y2] = point2;
+  const [x1, y1] = point1.map((n) => Number(n));
+  const [x2, y2] = point2.map((n) => Number(n));
   if (y1 === y2) {
     // horizontal
     const { min, max } = getMinMax(x1, x2);
@@ -88,6 +108,7 @@ function draw(map, point1, point2) {
     const { min, max } = getMinMax(y1, y2);
     drawDirection(floorGrid, x1, min, max, "vertical");
   } else {
+    drawDiagonal(floorGrid, x1, y1, x2, y2);
     // console.log(`not dealing with ${x1} ${y1} ${x2} ${y2}`);
   }
 }
