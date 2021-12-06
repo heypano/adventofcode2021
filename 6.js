@@ -54,7 +54,7 @@ function generateFish(initialTimer) {
 
 input.split(",").forEach((initialTimer) => generateFish(Number(initialTimer)));
 
-for (let day = 0; day < 256; day++) {
+for (let day = 0; day < 80; day++) {
   console.log(`Day ${day + 1}`);
   fishes.forEach((f) => {
     f.processDay();
