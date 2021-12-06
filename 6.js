@@ -1,31 +1,29 @@
-import input from "./input/6_easy.js";
+import input from "./input/6.js";
 
 class LanternFish {
   timer;
-  shouldGenerate = false;
-  justBorn = true;
-  constructor({ initialTimer = 8, onGenerate }) {
-    console.log(initialTimer);
+  name;
+  onGenerate = () => {
+    console.log("override this");
+  };
+  constructor({ initialTimer = 8, onGenerate, name }) {
+    // console.log(initialTimer);
     this.timer = initialTimer;
+    this.name = name;
     if (onGenerate) {
       this.onGenerate = onGenerate.bind(this);
     }
     this.processDay = this.processDay.bind(this);
   }
-  onGenerate = () => {
-    console.log("override this");
-  };
+  generate() {
+    // console.log(`${this.name} generating`);
+    this.onGenerate();
+  }
   processDay() {
     // console.log("Processing day", this.timer);
-    if (this.justBorn) {
-      this.justBorn = false;
-    } else if (this.shouldGenerate) {
-      this.onGenerate();
-      this.shouldGenerate = false;
-      this.timer--;
-    } else if (this.timer === 0) {
+    if (this.timer === 0) {
+      this.generate();
       this.timer = 6;
-      this.shouldGenerate = true;
     } else {
       this.timer--;
     }
@@ -41,20 +39,26 @@ class LanternFish {
 
 const fishes = [];
 
+let counter = 1;
+
 function generateFish(initialTimer) {
   // console.log("Generating");
   const newFish = new LanternFish({
     initialTimer,
     onGenerate: generateFish,
+    name: `Fish ${counter}`,
   });
   fishes.push(newFish);
+  counter++;
 }
 
 input.split(",").forEach((initialTimer) => generateFish(Number(initialTimer)));
 
-for (let day = 0; day < 5; day++) {
+for (let day = 0; day < 256; day++) {
+  console.log(`Day ${day + 1}`);
   fishes.forEach((f) => {
     f.processDay();
   });
-  console.log(fishes.map((fa) => fa.timer));
+  // console.log(fishes.map((fa) => fa.timer).join(","));
 }
+console.log(fishes.length);
