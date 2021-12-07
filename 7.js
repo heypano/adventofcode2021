@@ -21,8 +21,8 @@ function getData(array) {
   };
 }
 
-function calculateMovesToNumber(array, mean) {
-  return array.reduce((sum, current) => sum + Math.abs(current - mean), 0);
+function calculateMovesToNumber(array, number) {
+  return array.reduce((sum, current) => sum + Math.abs(current - number), 0);
 }
 
 const array = input.split(",").map((n) => Number(n));
