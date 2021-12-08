@@ -1,6 +1,6 @@
 import input from "./input/8.js";
 
-const digits = {
+export const digits = {
   0: { segments: ["a", "b", "c", "e", "f", "g"] },
   1: { segments: ["c", "f"] },
   2: { segments: ["a", "c", "d", "e", "g"] },
@@ -13,39 +13,55 @@ const digits = {
   9: { segments: ["a", "b", "c", "d", "f", "g"] },
 };
 
-/** By length: what digits have a segment array of that length */
-// e.g. {5: [ '2', '3', '5' ]},
-const lengthMap = {};
-Object.keys(digits).forEach((digit) => {
-  if (!lengthMap[digits[digit].segments.length]) {
-    lengthMap[digits[digit].segments.length] = [];
-  }
-  lengthMap[digits[digit].segments.length].push(digit);
-});
+/** By length: what digits have a segment array of that length
+ *  */
+export function getLengthMap(digits) {
+  // e.g. {5: [ '2', '3', '5' ]},
+  const lengthMap = {};
+  Object.keys(digits).forEach((digit) => {
+    if (!lengthMap[digits[digit].segments.length]) {
+      lengthMap[digits[digit].segments.length] = [];
+    }
+    lengthMap[digits[digit].segments.length].push(digit);
+  });
+  return lengthMap;
+}
 
-// Which segments lengths are unique (and what is the digit)
-const uniqueDigitLengths = Object.fromEntries(
-  Object.keys(lengthMap)
-    .filter((key) => {
-      const array = lengthMap[key];
-      return array.length === 1;
-    })
-    .map((length) => {
-      const digit = lengthMap[length][0];
-      return [length, digit];
-    })
-);
+/** Object where keys are unique length and values are the digit they represent */
+export function getUniqueDigitLengths(lengthMap) {
+  return Object.fromEntries(
+    Object.keys(lengthMap)
+      .filter((key) => {
+        const array = lengthMap[key];
+        return array.length === 1;
+      })
+      .map((length) => {
+        const digit = lengthMap[length][0];
+        return [length, digit];
+      })
+  );
+}
 
 /** By letter: what segments are included */
-const letterMap = {};
-// e.g. {a: {1: true}}
-Object.keys(digits).forEach((digit) => {
-  const letters = digits[digit].segments;
-  letters.forEach((letter) => {
-    if (!letterMap[letter]) letterMap[letter] = {};
-    letterMap[letter][digit] = true;
+export function getLetterMap(digits) {
+  const letterMap = {};
+  // e.g. {a: {1: true}}
+  Object.keys(digits).forEach((digit) => {
+    const letters = digits[digit].segments;
+    letters.forEach((letter) => {
+      if (!letterMap[letter]) letterMap[letter] = {};
+      letterMap[letter][digit] = true;
+    });
   });
-});
+  return letterMap;
+}
+
+const lengthMap = getLengthMap(digits);
+
+// Which segments lengths are unique (and what is the digit)
+const uniqueDigitLengths = getUniqueDigitLengths(lengthMap);
+
+const letterMap = getLetterMap(digits);
 
 const entries = input
   .replace(/\|\n/g, "| ")
